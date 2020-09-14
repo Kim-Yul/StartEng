@@ -20,7 +20,5 @@ void loop() {
 }
 
 int toggle_state(int toggle) {
-  digitalWrite(PIN_LED, 1);
-  delay(1000);
-  return toggle;
+  return (toggle == 1) ? 0 : 1;
 }
