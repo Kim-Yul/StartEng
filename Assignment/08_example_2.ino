@@ -52,11 +52,14 @@ void loop() {
   Serial.println("Max:400");
 
 // turn on the LED if the distance is between dist_min and dist_max
-  if(dist_raw < dist_min || dist_raw > dist_max) {
-    analogWrite(PIN_LED, 255);
+  if(int(dist_raw) == 200) {
+    analogWrite(PIN_LED, 0);
+  }
+  else if (150 < int(dist_raw) && int(dist_raw) < 250) {
+    analogWrite(PIN_LED, 127);
   }
   else {
-    analogWrite(PIN_LED, 0);
+    analogWrite(PIN_LED, 250);
   }
   
 // update last sampling time
