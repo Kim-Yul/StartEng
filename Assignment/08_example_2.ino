@@ -5,7 +5,7 @@
 
 // configurable parameters
 #define SND_VEL 346.0 // sound velocity at 24 celsius degree (unit: m/s)
-#define INTERVAL 100 // sampling interval (unit: ms)
+#define INTERVAL 25 // sampling interval (unit: ms)
 #define _DIST_MIN 100 // minimum distance to be measured (unit: mm)
 #define _DIST_MAX 300 // maximum distance to be measured (unit: mm)
 
@@ -58,9 +58,6 @@ void loop() {
   else {
     analogWrite(PIN_LED, 0);
   }
-
-// do something here
-  delay(50); // Assume that it takes 50ms to do something.
   
 // update last sampling time
   last_sampling_time += INTERVAL;
@@ -70,12 +67,19 @@ void loop() {
 float USS_measure(int TRIG, int ECHO)
 {
   float reading;
+  static float reading_save = 200;  //함수에서도 값이 유지되는 정적변수 사용
   digitalWrite(TRIG, HIGH);
   delayMicroseconds(10);
   digitalWrite(TRIG, LOW);
   reading = pulseIn(ECHO, HIGH, timeout) * scale; // unit: mm
-  if(reading < dist_min || reading > dist_max) reading = 0.0; // return 0 when out of range.
-  return reading;
+  if (reading < dist_min || reading > dist_max) {
+    reading = 0.0; // return 0 when out of range.
+    return reading_save;
+  }
+  else; {
+    reading_save = reading;
+    return reading;
+  }
   // Pulse duration to distance conversion example (target distance = 17.3m)
   // - round trip distance: 34.6m
   // - expected pulse duration: 0.1 sec, or 100,000us
